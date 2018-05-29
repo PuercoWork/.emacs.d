@@ -81,8 +81,24 @@
   :bind (("C-=" . 'er/expand-region)))
 
 ;; Spellcheck
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(use-package flyspell
+  :diminish 'flyspell-mode
+  :hook ((text-mode . flyspell-mode)
+         (prog-mode . flyspell-prog-mode)))
+
+(use-package evil
+  :ensure t
+  :init
+  (progn
+    (setq evil-want-C-u-scroll t)
+    (evil-mode 1)))
+
+(use-package evil-surround
+  :ensure t
+  :config (global-evil-surround-mode 1))
+
+(use-package eyebrowse
+  :ensure t)
 
 (use-package paren
   :init (show-paren-mode 1))
@@ -118,7 +134,6 @@
   :bind ((:map paredit-mode-map
                ("C-j" . nil))))
 
-
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
@@ -128,6 +143,7 @@
 (use-package magit
   :ensure t
   :bind (("C-c s" . 'magit-status))
+  :diminish auto-revert-mode
   :config
   (setq magit-display-buffer-function
         'magit-display-buffer-fullframe-status-topleft-v1))
@@ -267,5 +283,3 @@
 
 (use-package restclient
   :ensure t)
-
-(find-file "~/org/Platform.org")

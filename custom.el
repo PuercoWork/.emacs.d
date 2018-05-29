@@ -11,7 +11,7 @@
  '(org-agenda-files (quote ("~/org/Platform.org")))
  '(package-selected-packages
    (quote
-    (find-file-in-project ivy restclient rspec-mode json-mode minitest yaml-mode dockerfile-mode toml-mode sly xterm-color hardhat robe chruby paredit macrostep undo-tree sauron markdown-mode diminish doom-themes moody notmuch expand-region ido-vertical-mode ido-vertical ace-window magit smartparens password-vault+ helm helm-core popup async quelpa-use-package use-package use-package-ensure-system-package)))
+    (eyebrowse evil find-file-in-project ivy restclient rspec-mode json-mode minitest yaml-mode dockerfile-mode toml-mode sly xterm-color hardhat robe chruby paredit macrostep undo-tree sauron markdown-mode diminish doom-themes moody notmuch expand-region ido-vertical-mode ido-vertical ace-window magit smartparens password-vault+ helm helm-core popup async quelpa-use-package use-package use-package-ensure-system-package)))
  '(safe-local-variable-values
    (quote
     ((mangle-whitespace . t)
