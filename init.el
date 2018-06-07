@@ -114,6 +114,16 @@
   :load-path "site-lisp/password-vault+"
   :init (password-vault+-register-secrets-file (substitute-in-file-name "$HOME/.emacs.d/passwords.el.gpg")))
 
+
+(use-package docker-tramp
+  :ensure t)
+
+(use-package tablist
+  :ensure t)
+
+(use-package docker
+  :load-path "site-lisp")
+
 (setq smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-local-domain "gmail.com"
       smtpmail-sendto-domain "gmail.com"
@@ -168,37 +178,26 @@
           (buffer-substring-no-properties (point) (line-end-position)))
       (message "PPOP-UNREAD-MAIL: %S" (buffer-string)))))
 
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (load-theme 'doom-nova))
 
-
-(setq notmuch-unread-mail '(:eval (ppop-unread-mail)))
-(setq-default mode-line-format
-              '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification "   " mode-line-position (vc-mode vc-mode) "  " mode-line-modes mode-line-misc-info (:eval (ppop-notmuch-unread-mail)) mode-line-end-spaces)
-              tab-always-indent 'complete)
-
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-spacegrey)
-  ;; (let ((line (face-attribute 'mode-line :underline)))
-  ;;   (set-face-attribute 'mode-line          nil :overline   line)
-  ;;   (set-face-attribute 'mode-line-inactive nil :overline   line)
-  ;;   (set-face-attribute 'mode-line-inactive nil :underline  line)
-  ;;   (set-face-attribute 'mode-line          nil :box        nil)
-  ;;   (set-face-attribute 'mode-line-inactive nil :box        nil)
-  ;;   (set-face-attribute 'mode-line-inactive nil :background "#2a323a"))
-  )
+(use-package color-theme-sanityinc-tomorrow
+ :ensure t
+ :config (load-theme 'sanityinc-tomorrow-eighties))
 
 (use-package hardhat
   :ensure t
   :init (global-hardhat-mode 1)
   :diminish global-hardhat-mode)
 
-;; (use-package moody
-;;   :ensure t
-;;   :config
-;;   (setq x-underline-at-descent-line t)
-;;   (moody-replace-mode-line-buffer-identification)
-;;   (moody-replace-vc-mode))
+(use-package moody
+  :ensure t
+  :config
+  (setq x-underline-at-descent-line t)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
 
 (use-package xterm-color
   :ensure t
@@ -215,15 +214,24 @@
   (("C-c a" . 'org-agenda))
   :config (setq org-catch-invisible-edits 'show))
 
+(use-package mu4e
+  :load-path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/"
+  :config (setq mu4e-maildir "~/.mail/gmail"
+                mu4e-sent-folder "/Sent Mail"
+                mu4e-trash-folder "/Trash"))
 
-(use-package notmuch
-  :ensure t)
+(use-package mu4e-alert
+  :ensure t
+  :config (progn
+            (mu4e-alert-set-default-style 'osx-notifier)
+            (mu4e-alert-enable-mode-line-display)))
 
 (use-package dired
   :config (progn
             (put 'dired-find-alternate-file 'disabled nil)
             (add-hook 'dired-mode-hook 'dired-hide-details-mode)))
 
+(use-package dired-x)
 
 (use-package find-file-in-project
   :ensure t
@@ -281,5 +289,12 @@
   :config
   (setq json-reformat:indent-width 2))
 
+(use-package rjsx-mode
+  :ensure t
+  :mode "\\.jsx\\'")
+
 (use-package restclient
+  :ensure t)
+
+(use-package docean
   :ensure t)
