@@ -218,7 +218,8 @@
   :load-path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/"
   :config (setq mu4e-maildir "~/.mail/gmail"
                 mu4e-sent-folder "/Sent Mail"
-                mu4e-trash-folder "/Trash"))
+                mu4e-trash-folder "/Trash"
+                mu4e-get-mail-command "mbsync -a"))
 
 (use-package mu4e-alert
   :ensure t
@@ -266,23 +267,44 @@
 
 (use-package robe
   :ensure t
+  :diminish robe-mode
   :hook (ruby-mode . robe-mode)
   :init (advice-add 'inf-ruby-console-auto :around #'my/maybe-inject-proccess-environment))
 
 (use-package rspec-mode
   :ensure t
-  :load-path "site-lisp/rspec-mode"
   :hook ((ruby-mode . rspec-mode)
          (dired-mode . rspec-dired-mode))
   :diminish rspec-mode
   :init (progn (advice-add 'rspec-compile :around #'my/maybe-inject-proccess-environment)
                (advice-add 'recompile :around #'my/maybe-inject-proccess-environment)))
 
+(use-package web-mode
+  :ensure t
+  :mode "\\.erb\\'")
+
 (use-package yaml-mode
   :ensure t)
 
 (use-package sly
   :ensure t)
+
+(use-package js2-mode
+  :ensure t
+  :config (setq js2-basic-offset 2))
+
+(use-package flymake
+  :hook ((ruby-mode . flymake-mode))
+  :bind ((:map flymake-mode-map
+               ("M-n" . 'flymake-goto-next-error)
+               ("M-p" . 'flymake-goto-prev-error))))
+
+(use-package eglot
+  :ensure t)
+
+(use-package deadgrep
+  :load-path "site-lisp/deadgrep"
+  :config (defalias 'ag 'deadgrep))
 
 (use-package json-mode
   :ensure t
