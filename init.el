@@ -134,6 +134,9 @@
       smtpmail-debug-info t
       send-mail-function 'smtpmail-send-it)
 
+(use-package lisp-mode
+  :mode (".*?fino-script.*?\\.fs" . lisp-mode))
+
 (use-package paredit
   :ensure t
   :diminish paredit-mode
@@ -157,6 +160,11 @@
   :config
   (setq magit-display-buffer-function
         'magit-display-buffer-fullframe-status-topleft-v1))
+
+(add-hook 'lisp-interaction-mode-hook (lambda ()
+                                        (setq tab-always-indent 'complete)))
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (setq tab-always-indent 'complete)))
 
 (use-package eldoc
   :diminish eldoc-mode
@@ -309,7 +317,8 @@
 (use-package json-mode
   :ensure t
   :config
-  (setq json-reformat:indent-width 2))
+  (setq json-reformat:indent-width 2)
+  :mode (".*?fino-script.*?\\.ast" . json-mode))
 
 (use-package rjsx-mode
   :ensure t
