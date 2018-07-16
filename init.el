@@ -299,7 +299,8 @@
 
 (use-package js2-mode
   :ensure t
-  :config (setq js2-basic-offset 2))
+  :config (setq js2-basic-offset 2)
+  :mode ("\\.js\'"))
 
 (use-package flymake
   :hook ((ruby-mode . flymake-mode))
@@ -327,5 +328,8 @@
 (use-package restclient
   :ensure t)
 
+;; Configure occur-mode to save the files after exiting editing mode.
+(use-package occur
+  :bind (("C-c o" . occur)))
 (use-package docean
   :ensure t)
