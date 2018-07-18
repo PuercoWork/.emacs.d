@@ -12,10 +12,12 @@
  '(org-agenda-files (quote ("~/org/Platform.org")))
  '(package-selected-packages
    (quote
-    (prettier-js counsel-css counsel swiper typescript-mode edit-indirect cider epresent spinner eglot rspec-mode web-mode mu4e-alert dired-x mu4e color-theme-sanityinc-tomorrow rjsx-mode docean tablist docker-tramp eyebrowse find-file-in-project ivy restclient json-mode minitest yaml-mode dockerfile-mode toml-mode sly xterm-color hardhat robe chruby paredit macrostep undo-tree sauron markdown-mode diminish doom-themes moody expand-region ido-vertical-mode ido-vertical ace-window magit smartparens password-vault+ helm helm-core popup async use-package use-package-ensure-system-package)))
+    (wgrep prettier-js counsel-css counsel swiper typescript-mode edit-indirect cider epresent spinner eglot rspec-mode web-mode mu4e-alert dired-x mu4e color-theme-sanityinc-tomorrow rjsx-mode docean tablist docker-tramp eyebrowse find-file-in-project ivy restclient json-mode minitest yaml-mode dockerfile-mode toml-mode sly xterm-color hardhat robe chruby paredit macrostep undo-tree sauron markdown-mode diminish doom-themes moody expand-region ido-vertical-mode ido-vertical ace-window magit smartparens password-vault+ helm helm-core popup async use-package use-package-ensure-system-package)))
  '(safe-local-variable-values
    (quote
-    ((mangle-whitespace . t)
+    ((Base . 10)
+     (Syntax . ANSI-Common-Lisp)
+     (mangle-whitespace . t)
      (Syntax . Common-Lisp)
      (eval font-lock-add-keywords nil
            (\`

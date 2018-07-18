@@ -58,13 +58,55 @@
 (use-package diminish
   :ensure t)
 
-(use-package ido
-  :init (ido-mode 1))
+(defun ivy-format-function-cool-arrow (cands)
+  "Transform CANDS into a string for minibuffer."
+  (ivy--format-function-generic
+   (lambda (str)
+     (concat "↣ " (ivy--add-face str 'ivy-current-match)))
+   (lambda (str)
+     (concat "  " str))
+   cands
+   "\n"))
 
-(use-package ido-vertical-mode
-  :init (progn
-          (ido-vertical-mode 1)
-          (setq ido-vertical-indicator "↣")))
+(use-package ivy
+  :ensure t
+  :config
+  (setq ivy-format-function 'ivy-format-function-cool-arrow
+        ivy-use-virtual-buffers t)
+  :bind (("C-c C-r" . ivy-resume)))
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)))
+
+(use-package counsel
+  :ensure t
+  :bind (("C-h f" . counsel-describe-function)
+         ("C-h v" . counsel-describe-variable)
+         ("C-x C-f" . counsel-find-file)
+         ("C-c C-f" . counsel-git)
+         ("C-c g" . counsel-git-grep)
+         ("<f2> i" . counsel-info-lookup-symbol)
+         ("<f2> u" . counsel-unicode-char)
+         ("<f2> k" . counsel-find-library)))
+
+(use-package counsel-css
+  :ensure t
+  :bind ((:map css-mode-map
+               ("C-s" . counsel-css)) ))
+
+(use-package wgrep
+  :ensure t)
+
+(use-package deadgrep
+  :load-path "site-lisp/deadgrep"
+  :config (defalias 'ag 'deadgrep))
+
+;; Configure occur-mode to save the files after exiting editing mode.
+(use-package occur
+  :config (progn
+            (next-error-follow-minor-mode &optional ARG))
+  :bind (("C-c o" . occur)))
 
 (use-package ace-window
   :ensure t
@@ -311,10 +353,6 @@
 (use-package eyebrowse
   :ensure t)
 
-(use-package deadgrep
-  :load-path "site-lisp/deadgrep"
-  :config (defalias 'ag 'deadgrep))
-
 (use-package json-mode
   :ensure t
   :config
@@ -324,11 +362,6 @@
 (use-package rjsx-mode
   :ensure t
   :mode "\\.jsx\\'")
-
-(use-package counsel-css
-  :ensure t
-  :bind ((:map css-mode-map
-               ("C-s" . counsel-css)) ))
 
 (use-package typescript-mode
   :ensure t)
@@ -341,12 +374,6 @@
 
 (use-package restclient
   :ensure t)
-
-;; Configure occur-mode to save the files after exiting editing mode.
-(use-package occur
-  :config (progn
-            (next-error-follow-minor-mode &optional ARG))
-  :bind (("C-c o" . occur)))
 
 (use-package docean
   :ensure t)
