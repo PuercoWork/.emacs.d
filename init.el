@@ -86,17 +86,6 @@
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode)))
 
-(use-package evil
-  :ensure t
-  :init
-  (progn
-    (setq evil-want-C-u-scroll t)
-    (evil-mode 1)))
-
-(use-package evil-surround
-  :ensure t
-  :config (global-evil-surround-mode 1))
-
 (use-package eyebrowse
   :ensure t)
 
@@ -135,7 +124,7 @@
       send-mail-function 'smtpmail-send-it)
 
 (use-package lisp-mode
-  :mode (".*?fino-script.*?\\.fs" . lisp-mode))
+  :mode (".*?fino-editor.*?\\.fs" . lisp-mode))
 
 (use-package paredit
   :ensure t
@@ -300,7 +289,14 @@
 (use-package js2-mode
   :ensure t
   :config (setq js2-basic-offset 2)
-  :mode ("\\.js\'"))
+  :mode ("\\.js\\'"))
+
+(use-package prettier-js
+  :ensure t
+  :config (setq prettier-js-command "npx"
+                prettier-js-args '("prettier"))
+  :hook ((js2-mode . prettier-js-mode)
+         (rjsx-mode . prettier-js-mode)))
 
 (use-package flymake
   :hook ((ruby-mode . flymake-mode))
@@ -311,6 +307,10 @@
 (use-package eglot
   :ensure t)
 
+;; Not sure if necessary. C-x r w seems to be enough for my needs.
+(use-package eyebrowse
+  :ensure t)
+
 (use-package deadgrep
   :load-path "site-lisp/deadgrep"
   :config (defalias 'ag 'deadgrep))
@@ -319,17 +319,35 @@
   :ensure t
   :config
   (setq json-reformat:indent-width 2)
-  :mode (".*?fino-script.*?\\.ast" . json-mode))
+  :mode (".*?fino-editor.*?\\.ast" . json-mode))
 
 (use-package rjsx-mode
   :ensure t
   :mode "\\.jsx\\'")
+
+(use-package counsel-css
+  :ensure t
+  :bind ((:map css-mode-map
+               ("C-s" . counsel-css)) ))
+
+(use-package typescript-mode
+  :ensure t)
+
+(use-package cider
+  :ensure t)
+
+(use-package epresent
+  :ensure t)
 
 (use-package restclient
   :ensure t)
 
 ;; Configure occur-mode to save the files after exiting editing mode.
 (use-package occur
+  :config (progn
+            (next-error-follow-minor-mode &optional ARG))
   :bind (("C-c o" . occur)))
+
 (use-package docean
   :ensure t)
+(put 'narrow-to-page 'disabled nil)
