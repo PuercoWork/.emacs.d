@@ -72,12 +72,18 @@
   :ensure t
   :config
   (setq ivy-format-function 'ivy-format-function-cool-arrow
-        ivy-use-virtual-buffers t)
-  :bind (("C-c C-r" . ivy-resume)))
+        ivy-use-virtual-buffers t
+        ivy-dispay-format 'fancy)
+  :bind (("C-c C-r" . ivy-resume)
+         ("C-x b" . ivy-switch-buffer)
+         ("C-c v" . ivy-push-view)
+         ("C-c V" . ivy-pop-view)))
+;; ivy-pop-view ?
+;; TODO: Research if I can bookmark window-configurations or views
 
 (use-package swiper
   :ensure t
-  :bind (("C-s" . swiper)))
+  :bind (("C-c o" . swiper)))
 
 (use-package counsel
   :ensure t
@@ -89,6 +95,10 @@
          ("<f2> i" . counsel-info-lookup-symbol)
          ("<f2> u" . counsel-unicode-char)
          ("<f2> k" . counsel-find-library)))
+
+(use-package find-file-in-project
+  :ensure t
+  :bind (("C-x p" . 'find-file-in-project)))
 
 (use-package counsel-css
   :ensure t
@@ -103,10 +113,10 @@
   :config (defalias 'ag 'deadgrep))
 
 ;; Configure occur-mode to save the files after exiting editing mode.
-(use-package occur
-  :config (progn
-            (next-error-follow-minor-mode &optional ARG))
-  :bind (("C-c o" . occur)))
+;; (use-package occur
+;;   :config (progn
+;;             (next-error-follow-minor-mode &optional ARG))
+;;   :bind (("C-c o" . occur)))
 
 (use-package ace-window
   :ensure t
@@ -273,9 +283,14 @@
 
 (use-package dired-x)
 
-(use-package find-file-in-project
+(use-package ibuffer-vc
   :ensure t
-  :bind (("M-p" . 'find-file-in-project)))
+  :init
+  (add-hook 'ibuffer-hook
+    (lambda ()
+      (ibuffer-vc-set-filter-groups-by-vc-root)
+      (unless (eq ibuffer-sorting-mode 'alphabetic)
+        (ibuffer-do-sort-by-alphabetic)))))
 
 (use-package nix-mode
   :load-path "site-lisp/nix-mode")
@@ -326,15 +341,18 @@
   :ensure t)
 
 (use-package sly
-  :ensure t)
+  :ensure t
+  :config (setq sly-lisp-implementations '((sbcl ))))
 
 (use-package js2-mode
   :ensure t
   :config (setq js2-basic-offset 2)
-  :mode ("\\.js\\'"))
+  :mode ("\\.js\\'")
+  :hook ((js2-mode . (lambda () (setq mode-name "JS2")))))
 
 (use-package prettier-js
   :ensure t
+  :diminish prettier-js-mode
   :config (setq prettier-js-command "npx"
                 prettier-js-args '("prettier"))
   :hook ((js2-mode . prettier-js-mode)
@@ -347,11 +365,19 @@
                ("M-p" . 'flymake-goto-prev-error))))
 
 (use-package eglot
-  :ensure t)
+  :ensure t
+  :hook ((js2-mode . eglot-ensure)))
 
 ;; Not sure if necessary. C-x r w seems to be enough for my needs.
 (use-package eyebrowse
-  :ensure t)
+  :ensure t
+  :bind (("C-c 1" . eyebrowse-switch-to-window-config-1)
+         ("C-c 2" . eyebrowse-switch-to-window-config-2)
+         ("C-c 3" . eyebrowse-switch-to-window-config-3)
+         ("C-c 4" . eyebrowse-switch-to-window-config-4)
+         ("C-c 5" . eyebrowse-switch-to-window-config-5)
+         ("C-c 6" . eyebrowse-switch-to-window-config-6)
+         ("C-c 7" . eyebrowse-switch-to-window-config-7)))
 
 (use-package json-mode
   :ensure t
@@ -374,6 +400,33 @@
 
 (use-package restclient
   :ensure t)
+
+(use-package xterm-color
+  :ensure t
+  :init (add-hook 'compilation-start-hook
+          (lambda (proc)
+            ;; We need to differentiate between compilation-mode buffers
+            ;; and running as part of comint (which at this point we assume
+            ;; has been configured separately for xterm-color)
+            (when (eq (process-filter proc) 'compilation-filter)
+              ;; This is a process associated with a compilation-mode buffer.
+              ;; We may call `xterm-color-filter' before its own filter function.
+              (set-process-filter
+               proc
+               (lambda (proc string)
+                 (funcall 'compilation-filter proc
+                          (xterm-color-filter string))))))))
+
+(use-package honcho
+  :ensure t)
+
+(honcho-define-service fino-editor
+  :command ("npm" "run" "start")
+  :cwd "/Users/puercopop/Projects/fino-editor/")
+
+(use-package subword-mode
+  :diminish subword-mode
+  :hook ((js2-mode . subword-mode)))
 
 (use-package docean
   :ensure t)
