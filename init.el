@@ -75,7 +75,10 @@
   :bind (("C-c C-r" . ivy-resume)
          ("C-x b" . ivy-switch-buffer)
          ("C-c v" . ivy-push-view)
-         ("C-c V" . ivy-pop-view)))
+         ("C-c V" . ivy-pop-view)
+         (:map ivy-minibuffer-map
+               ("C-s" . ivy-next-line)
+               ("C-r" . ivy-previous-line))))
 ;; ivy-pop-view ?
 ;; TODO: Research if I can bookmark window-configurations or views
 
