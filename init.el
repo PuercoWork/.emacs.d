@@ -13,13 +13,11 @@
 (require 'cl-lib)
 (require 'package)
 
-(let
-    ((melpa '("melpa" . "https://melpa.org/packages/"))
-     (org '("org" . "https://orgmode.org/elpa"))
-     (emacs-pe '(("emacs-pe" . "https://emacs-pe.github.io/packages"))))
+(let ((melpa '("melpa" . "https://melpa.org/packages/"))
+      (emacs-pe '(("emacs-pe" . "https://emacs-pe.github.io/packages"))))
   (add-to-list 'package-archives melpa t)
-  (add-to-list 'package-archives emacs-pe t)
-  (add-to-list 'package-archives org t))
+  ;; (add-to-list 'package-archives emacs-pe t)
+  )
 
 (package-initialize)
 
