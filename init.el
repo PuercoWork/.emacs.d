@@ -348,7 +348,7 @@
 
 (use-package sly
   :ensure t
-  :config (setq sly-lisp-implementations '((sbcl ))))
+  :config (setq sly-lisp-implementations '((sbcl ("/usr/local/bin/sbcl")))))
 
 (use-package js2-mode
   :ensure t
