@@ -435,6 +435,10 @@
   :diminish subword-mode
   :hook ((js2-mode . subword-mode)))
 
+
+(use-package compile-eslint
+  :load-path "site-lisp/compile-eslint"
+  :init (push 'eslint compilation-error-regexp-alist))
 (use-package docean
   :ensure t)
 (put 'narrow-to-page 'disabled nil)
