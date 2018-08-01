@@ -204,6 +204,10 @@
   (setq magit-display-buffer-function
         'magit-display-buffer-fullframe-status-topleft-v1))
 
+(use-package magithub
+  :ensure t
+  :config (magithub-feature-autoinject t))
+
 (add-hook 'lisp-interaction-mode-hook (lambda ()
                                         (setq tab-always-indent 'complete)))
 (add-hook 'emacs-lisp-mode-hook (lambda ()
