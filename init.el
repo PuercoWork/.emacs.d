@@ -38,8 +38,8 @@
 
 (setq backup-directory-alist `(("." . ,(expand-file-name
 					(concat user-emacs-directory "backups"))))
-      make-backup-files t
-      vc-make-backup-files t
+      make-backup-files nil
+      vc-make-backup-files nil
       auto-save-default nil
       uniquify-buffer-name-style 'forward)
 
