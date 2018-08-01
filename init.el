@@ -347,6 +347,7 @@
 
 (use-package js2-mode
   :ensure t
+  :diminish subword-mode
   :config (setq js2-basic-offset 2)
   :mode ("\\.js\\'")
   :hook ((js2-mode . (lambda () (setq mode-name "JS2")))))
