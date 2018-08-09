@@ -373,8 +373,7 @@
                ("M-p" . 'flymake-goto-prev-error))))
 
 (use-package eglot
-  :ensure t
-  :hook ((js2-mode . eglot-ensure)))
+  :ensure t)
 
 ;; Not sure if necessary. C-x r w seems to be enough for my needs.
 (use-package eyebrowse
