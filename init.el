@@ -251,6 +251,7 @@
   :ensure t
   :config
   (setq x-underline-at-descent-line t)
+  (setq moody-slant-function #'moody-slant-apple-rgb)
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
