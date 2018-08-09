@@ -114,11 +114,10 @@
   :load-path "site-lisp/deadgrep"
   :config (defalias 'ag 'deadgrep))
 
-;; Configure occur-mode to save the files after exiting editing mode.
-;; (use-package occur
-;;   :config (progn
-;;             (next-error-follow-minor-mode &optional ARG))
-;;   :bind (("C-c o" . occur)))
+(use-package info
+  :bind ((:map Info-mode-map
+               ("(" . Info-backward-node)
+               (")" . Info-forward-node))))
 
 (use-package ace-window
   :ensure t
@@ -233,14 +232,32 @@
           (buffer-substring-no-properties (point) (line-end-position)))
       (message "PPOP-UNREAD-MAIL: %S" (buffer-string)))))
 
-;; (use-package doom-themes
-;;   :ensure t
-;;   :config
-;;   (load-theme 'doom-nova))
+(use-package exotica-theme
+  :ensure t
+  :config (load-theme 'exotica t))
 
-(use-package color-theme-sanityinc-tomorrow
- :ensure t
- :config (load-theme 'sanityinc-tomorrow-eighties))
+;; (use-package cyberpunk-theme
+;;   :ensure t
+;;   :config (load-theme 'cyberpunk t))
+
+;; (use-package darktooth-theme
+;;   :ensure t
+;;   :config (load-theme 'darktooth t))
+
+;; (use-package lush-theme
+;;   :ensure t
+;;   :config (load-theme 'lush t))
+
+;; Cool green, poor typography choices
+;; (use-package ahungry-theme
+;;   :ensure t
+;;   :config (progn (setq ahungry-theme-font-settings nil)
+;;                  (load-theme 'ahungry t)))
+
+;; Cool Purpule
+;; (use-package color-theme-sanityinc-tomorrow
+;;  :ensure t
+;;  :config (load-theme 'sanityinc-tomorrow-eighties))
 
 (use-package hardhat
   :ensure t
@@ -299,10 +316,12 @@
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic)))))
 
+(use-package subword-mode
+  :diminish subword-mode
+  :hook ((js2-mode . subword-mode)))
+
 (use-package nix-mode
   :load-path "site-lisp/nix-mode")
-
-
 
 (use-package markdown-mode
   :ensure t
@@ -427,18 +446,46 @@
 (use-package honcho
   :ensure t)
 
-(honcho-define-service fino-editor
-  :command ("npm" "run" "start")
-  :cwd "/Users/puercopop/Projects/fino-editor/")
-
-(use-package subword-mode
-  :diminish subword-mode
-  :hook ((js2-mode . subword-mode)))
-
+(use-package compile
+  :config (assq-delete-all 'compilation-in-progress minor-mode-alist))
 
 (use-package compile-eslint
   :load-path "site-lisp/compile-eslint"
   :init (push 'eslint compilation-error-regexp-alist))
+
+(use-package sql
+  ;; :bind (("C-c a s" . sql-connect))
+  :config
+  (progn
+    (plist-put (cdr (assq 'postgres sql-product-alist)) :prompt-regexp "^[[:alnum:]_-]*=[#>] ")
+    (plist-put (cdr (assq 'postgres sql-product-alist)) :prompt-cont-regexp "^[[:alnum:]_-]*[-(][#>] ")
+    (defun marsam-sql-set-variables ()
+      "Set variables on switch to sqli buffer."
+      (cl-case sql-product
+        (mysql    (setq sql-input-ring-separator "\n"
+                        sql-input-ring-file-name (concat (file-remote-p default-directory) "~/.mysql_history")))
+        (sqlite   (setq sql-input-ring-separator "\n"
+                        sql-input-ring-file-name (concat (file-remote-p default-directory) "~/.sqlite_history")))
+        (postgres (setq sql-input-ring-separator "\n"
+                        sql-input-ring-file-name (concat (file-remote-p default-directory) "~/.psql_history")))))
+
+    (add-hook 'sql-interactive-mode-hook #'marsam-sql-set-variables)))
+
+(use-package sql-indent
+  :ensure t
+  :init (add-hook 'sql-mode-hook 'sqlind-minor-mode))
+
 (use-package docean
   :ensure t)
+
+(use-package rainbow-mode
+  :ensure t
+  :config (setq rainbow-x-colors nil)
+  :mode (("\\.css$" . rainbow-mode)
+         ("\\.less$" . rainbow-mode)
+         ("\\.sass$" . rainbow-mode)))
+
+(setq project-config-file "~/.emacs.d/project-config.el")
+(load project-config-file 'noerror)
+
 (put 'narrow-to-page 'disabled nil)
