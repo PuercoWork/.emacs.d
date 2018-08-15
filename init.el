@@ -41,6 +41,7 @@
       make-backup-files nil
       vc-make-backup-files nil
       auto-save-default nil
+      create-lockfiles nil
       uniquify-buffer-name-style 'forward)
 
 ;; OS X specific
@@ -96,11 +97,11 @@
          ("C-c g" . counsel-git-grep)
          ("<f2> i" . counsel-info-lookup-symbol)
          ("<f2> u" . counsel-unicode-char)
-         ("<f2> k" . counsel-find-library)))
+         ("<f2> k" . counsel-find-library)
+         ("C-x p" . counsel-git)))
 
 (use-package find-file-in-project
-  :ensure t
-  :bind (("C-x p" . 'find-file-in-project)))
+  :ensure t)
 
 (use-package counsel-css
   :ensure t
@@ -281,6 +282,8 @@
           (remove 'ansi-color-process-output comint-output-filter-functions))))
 
 ;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package org
   :bind
@@ -485,6 +488,11 @@
          ("\\.less$" . rainbow-mode)
          ("\\.sass$" . rainbow-mode)))
 
+(use-package ri
+  :load-path "site-lisp/ri.el")
+
+(use-package pivotal-tracker
+  :load-path "site-lisp/pivotal-tracker")
 (setq project-config-file "~/.emacs.d/project-config.el")
 (load project-config-file 'noerror)
 
