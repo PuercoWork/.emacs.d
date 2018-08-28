@@ -14,9 +14,11 @@
 (require 'package)
 
 (let ((melpa '("melpa" . "https://melpa.org/packages/"))
-      (emacs-pe '(("emacs-pe" . "https://emacs-pe.github.io/packages"))))
+      (emacs-pe '(("emacs-pe" . "https://emacs-pe.github.io/packages")))
+      (org-mode '("org" . "https://orgmode.org/elpa/")))
   (add-to-list 'package-archives melpa t)
   ;; (add-to-list 'package-archives emacs-pe t)
+  (add-to-list 'package-archives org-mode t)
   )
 
 (package-initialize)
@@ -377,7 +379,8 @@
 
 (use-package sly
   :ensure t
-  :config (setq sly-lisp-implementations '((sbcl ("/usr/local/bin/sbcl")))))
+  :config (setq inferior-lisp-program "/usr/local/bin/sbcl"
+                sly-lisp-implementations '((sbcl ("/usr/local/bin/sbcl")))))
 
 (use-package js2-mode
   :ensure t
@@ -499,6 +502,9 @@
 
 (use-package pivotal-tracker
   :load-path "site-lisp/pivotal-tracker")
+(use-package org-drill
+  :load-path "site-lisp/org-drill")
+
 (setq project-config-file "~/.emacs.d/project-config.el")
 (load project-config-file 'noerror)
 
