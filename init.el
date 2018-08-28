@@ -67,22 +67,28 @@
    cands
    "\n"))
 
-(use-package ivy
-  :ensure t
-  :config
-  (setq ivy-format-function 'ivy-format-function-cool-arrow
-        ivy-use-virtual-buffers t
-        ivy-dispay-format 'fancy)
-  :bind (("C-c C-r" . ivy-resume)
-         ("C-x b" . ivy-switch-buffer)
-         ("C-c v" . ivy-push-view)
-         ("C-c V" . ivy-pop-view)
-         (:map ivy-minibuffer-map
-               ("C-s" . ivy-next-line)
-               ("C-r" . ivy-previous-line))))
-;; ivy-pop-view ?
-;; TODO: Research if I can bookmark window-configurations or views
+(use-package ido
+  :init (progn
+          (ido-mode t)
+          (ido-everywhere t)
+          (add-to-list 'ido-ignore-files "\\.DS_Store"))
+  :config (setq ido-enable-flex-matching t
+                ido-create-new-buffer 'always
+                ido-use-virtual-buffers nil)
+  :bind (:map ido-file-completion-map
+              (("C-w" . ido-delete-backward-updir))))
 
+(use-package ido-vertical-mode
+  :ensure t
+  :after (ido)
+  :init (ido-vertical-mode t))
+
+;; (use-package ido-better-flex
+;;   :load-path "site-lisp/ido-better-flex"
+;;   :after (ido)
+;;   :config (ido-better-flex/enable))
+
+;; TODO: Research if I can bookmark window-configurations or views
 (use-package swiper
   :ensure t
   :bind (("C-c o" . swiper)))
@@ -92,7 +98,6 @@
   :config (setq counsel-find-file-occur-use-find t)
   :bind (("C-h f" . counsel-describe-function)
          ("C-h v" . counsel-describe-variable)
-         ("C-x C-f" . counsel-find-file)
          ("C-c C-f" . counsel-git)
          ("C-c g" . counsel-git-grep)
          ("<f2> i" . counsel-info-lookup-symbol)
@@ -141,7 +146,8 @@
          (prog-mode . flyspell-prog-mode)))
 
 (use-package eyebrowse
-  :ensure t)
+  :ensure t
+  :init (eyebrowse-mode t))
 
 (use-package paren
   :init (show-paren-mode 1))

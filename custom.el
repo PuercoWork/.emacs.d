@@ -9,15 +9,16 @@
  '(epa-pinentry-mode (quote loopback))
  '(notmuch-hello-hide-tags (quote ("attachment")))
  '(notmuch-search-oldest-first nil)
- '(org-agenda-files (quote ("~/org/Platform.org")))
+ '(org-agenda-files (quote ("~/org/tasks.org" "~/org/Platform.org")))
  '(package-selected-packages
    (quote
-    (pamparam pamparan exotica-theme lush-theme ahungry-theme rainbow-mode cyberpunk-theme darktooth-theme sql-indent counsel-dash magithub compile-eslint honcho ibuffer-vc wgrep prettier-js counsel-css counsel swiper typescript-mode edit-indirect cider epresent spinner eglot rspec-mode web-mode mu4e-alert dired-x mu4e color-theme-sanityinc-tomorrow rjsx-mode docean tablist docker-tramp eyebrowse find-file-in-project ivy restclient json-mode minitest yaml-mode dockerfile-mode toml-mode sly xterm-color hardhat robe chruby paredit macrostep undo-tree sauron markdown-mode diminish doom-themes moody expand-region ido-vertical-mode ido-vertical ace-window magit smartparens password-vault+ helm helm-core popup async use-package use-package-ensure-system-package)))
+    (ido-better-flex org-plus-contrib pamparam pamparan exotica-theme lush-theme ahungry-theme rainbow-mode cyberpunk-theme darktooth-theme sql-indent counsel-dash magithub compile-eslint honcho ibuffer-vc wgrep prettier-js counsel-css counsel swiper typescript-mode edit-indirect cider epresent spinner eglot rspec-mode web-mode mu4e-alert dired-x mu4e color-theme-sanityinc-tomorrow rjsx-mode docean tablist docker-tramp eyebrowse find-file-in-project ivy restclient json-mode minitest yaml-mode dockerfile-mode toml-mode sly xterm-color hardhat robe chruby paredit macrostep undo-tree sauron markdown-mode diminish doom-themes moody expand-region ido-vertical-mode ido-vertical ace-window magit smartparens password-vault+ helm helm-core popup async use-package use-package-ensure-system-package)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((time-stamp-active . t)
+     (eval when
            (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
@@ -35,7 +36,8 @@
                         t)
                        "\\_>"))
               1
-              (quote font-lock-variable-name-face)))))))))
+              (quote font-lock-variable-name-face))))))))
+ '(web-mode-markup-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
