@@ -4,7 +4,8 @@
 
 (setq inhibit-startup-message t
       message-log-max t
-      load-prefer-newer t)
+      load-prefer-newer t
+      column-number-mode t)
 
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -56,8 +57,9 @@
 
 (set-face-attribute 'default nil :height 160)
 
-(use-package diminish
-  :ensure t)
+(use-package minions
+  :ensure t
+  :config (minions-mode 1))
 
 (defun ivy-format-function-cool-arrow (cands)
   "Transform CANDS into a string for minibuffer."
@@ -143,7 +145,6 @@
 
 ;; Spellcheck
 (use-package flyspell
-  :diminish 'flyspell-mode
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode)))
 
@@ -190,7 +191,6 @@
 
 (use-package paredit
   :ensure t
-  :diminish paredit-mode
   :init
   (add-hook 'lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
@@ -199,15 +199,13 @@
                ("C-j" . nil))))
 
 (use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :config (global-undo-tree-mode 1)
+  :ensure config
+  :t (global-undo-tree-mode 1)
   :bind (("C-x u" . 'undo)))
 
 (use-package magit
   :ensure t
   :bind (("C-c s" . 'magit-status))
-  :diminish auto-revert-mode
   :config
   (setq magit-display-buffer-function
         'magit-display-buffer-fullframe-status-topleft-v1))
@@ -222,7 +220,6 @@
                                   (setq tab-always-indent 'complete)))
 
 (use-package eldoc
-  :diminish eldoc-mode
   :init (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
 
 (use-package macrostep
@@ -270,8 +267,7 @@
 
 (use-package hardhat
   :ensure t
-  :init (global-hardhat-mode 1)
-  :diminish global-hardhat-mode)
+  :init (global-hardhat-mode 1))
 
 (use-package moody
   :ensure t
@@ -337,7 +333,6 @@
         (ibuffer-do-sort-by-alphabetic)))))
 
 (use-package subword-mode
-  :diminish subword-mode
   :hook ((js2-mode . subword-mode)))
 
 (use-package nix-mode
@@ -367,7 +362,6 @@
 
 (use-package robe
   :ensure t
-  :diminish robe-mode
   :hook (ruby-mode . robe-mode)
   :init (advice-add 'inf-ruby-console-auto :around #'my/maybe-inject-proccess-environment))
 
@@ -375,7 +369,6 @@
   :ensure t
   :hook ((ruby-mode . rspec-mode)
          (dired-mode . rspec-dired-mode))
-  :diminish rspec-mode
   :init (progn (advice-add 'rspec-compile :around #'my/maybe-inject-proccess-environment)
                (advice-add 'recompile :around #'my/maybe-inject-proccess-environment)))
 
@@ -393,14 +386,12 @@
 
 (use-package js2-mode
   :ensure t
-  :diminish subword-mode
   :config (setq js2-basic-offset 2)
   :mode ("\\.js\\'")
   :hook ((js2-mode . (lambda () (setq mode-name "JS2")))))
 
 (use-package prettier-js
   :ensure t
-  :diminish prettier-js-mode
   :config (setq prettier-js-command "npx"
                 prettier-js-args '("prettier"))
   :hook ((js2-mode . prettier-js-mode)
@@ -511,6 +502,11 @@
 
 (use-package pivotal-tracker
   :load-path "site-lisp/pivotal-tracker")
+
+;; TODO configure
+(use-package pamparam
+  :ensure t)
+
 (use-package org-drill
   :load-path "site-lisp/org-drill")
 
