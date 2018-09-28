@@ -303,13 +303,22 @@
   :config (setq mu4e-maildir "~/.mail/gmail"
                 mu4e-sent-folder "/Sent Mail"
                 mu4e-trash-folder "/Trash"
-                mu4e-get-mail-command "mbsync -a"))
+                mu4e-get-mail-command "mbsync -a")
+  :bind ((:map mu4e-headers-mode-map
+               (")" . 'mu4e-headers-next-unread)
+               ("(" . 'mu4e-headers-prev-unread))
+         (:map mu4e-view-mode-map
+               (")" . 'mu4e-view-headers-next-unread)
+               ("(" . 'mu4e-view-headers-prev-unread))))
 
 (use-package mu4e-alert
   :ensure t
   :config (progn
             (mu4e-alert-set-default-style 'osx-notifier)
             (mu4e-alert-enable-mode-line-display)))
+
+(use-package org-mu4e
+  :after (org mu4e))
 
 (use-package dired
   :config (progn
