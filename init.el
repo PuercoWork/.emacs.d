@@ -199,8 +199,8 @@
                ("C-j" . nil))))
 
 (use-package undo-tree
-  :ensure config
-  :t (global-undo-tree-mode 1)
+  :ensure t
+  :config (global-undo-tree-mode 1)
   :bind (("C-x u" . 'undo)))
 
 (use-package magit
@@ -354,6 +354,11 @@
                              (match-string-no-properties 1 line)
                              (match-string-no-properties 2 line)))))
 
+(defun my/call-in-rspec-mode (fn)
+  (lambda (&rest args)
+    (when (eq major-mode 'rspec-compilation-mode)
+      (apply fn args))))
+
 (defun my/maybe-inject-proccess-environment (orig-fun &rest args)
   (chruby-use-corresponding)
   (when-let ((default-directory (locate-dominating-file default-directory ".git/"))
@@ -370,7 +375,7 @@
   :hook ((ruby-mode . rspec-mode)
          (dired-mode . rspec-dired-mode))
   :init (progn (advice-add 'rspec-compile :around #'my/maybe-inject-proccess-environment)
-               (advice-add 'recompile :around #'my/maybe-inject-proccess-environment)))
+               (advice-add 'recompile :around (my/call-in-rspec-mode  #'my/maybe-inject-proccess-environment))))
 
 (use-package web-mode
   :ensure t
