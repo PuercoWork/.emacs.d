@@ -502,6 +502,10 @@
          ("\\.less$" . rainbow-mode)
          ("\\.sass$" . rainbow-mode)))
 
+(use-package rainbow-delimiters
+  :ensure t
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+
 (use-package ri
   :load-path "site-lisp/ri.el")
 
