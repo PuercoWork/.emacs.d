@@ -212,7 +212,8 @@
 
 (use-package magithub
   :ensure t
-  :config (magithub-feature-autoinject t))
+  :config (magithub-feature-autoinject t)
+  (magithub-feature-autoinject '(commit-browse status-checks-header completion)))
 
 (add-hook 'lisp-interaction-mode-hook (lambda ()
                                         (setq tab-always-indent 'complete)))
@@ -314,12 +315,17 @@
             (mu4e-alert-enable-mode-line-display)))
 
 (use-package org-mu4e
-  :after (org mu4e))
+  :after (org mu4e)
+  :bind ((:map mu4e-headers-mode-map
+               ("C-c c") . 'org-mu4e-store-and-capture)
+         (:map mu4e-view-mode-map
+               ("C-c c") . 'org-mu4e-store-and-capture)))
 
 (use-package dired
   :config (progn
             (put 'dired-find-alternate-file 'disabled nil)
-            (add-hook 'dired-mode-hook 'dired-hide-details-mode)))
+            (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+            (setq dired-dwim-target t)))
 
 (use-package dired-x)
 
@@ -355,9 +361,10 @@
                              (match-string-no-properties 2 line)))))
 
 (defun my/call-in-rspec-mode (fn)
-  (lambda (&rest args)
-    (when (eq major-mode 'rspec-compilation-mode)
-      (apply fn args))))
+  (lambda (orig-fn &rest args)
+    (if (eq major-mode 'rspec-compilation-mode)
+      	(apply fn orig-fn args)
+      (apply orig-fn args))))
 
 (defun my/maybe-inject-proccess-environment (orig-fun &rest args)
   (chruby-use-corresponding)
@@ -403,7 +410,7 @@
          (rjsx-mode . prettier-js-mode)))
 
 (use-package flymake
-  :hook ((ruby-mode . flymake-mode))
+  ;; :hook ((ruby-mode . flymake-mode)) ; Disable flymake unless the ruby is inside a project
   :bind ((:map flymake-mode-map
                ("M-n" . 'flymake-goto-next-error)
                ("M-p" . 'flymake-goto-prev-error))))
