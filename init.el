@@ -302,11 +302,11 @@
                 mu4e-trash-folder "/Trash"
                 mu4e-get-mail-command "mbsync -a")
   :bind ((:map mu4e-headers-mode-map
-               (")" . 'mu4e-headers-next-unread)
-               ("(" . 'mu4e-headers-prev-unread))
+               (")" . mu4e-headers-next-unread)
+               ("(" . mu4e-headers-prev-unread))
          (:map mu4e-view-mode-map
-               (")" . 'mu4e-view-headers-next-unread)
-               ("(" . 'mu4e-view-headers-prev-unread))))
+               (")" . mu4e-view-headers-next-unread)
+               ("(" . mu4e-view-headers-prev-unread))))
 
 (use-package mu4e-alert
   :ensure t
@@ -317,9 +317,9 @@
 (use-package org-mu4e
   :after (org mu4e)
   :bind ((:map mu4e-headers-mode-map
-               ("C-c c") . 'org-mu4e-store-and-capture)
+               ("C-c c" . org-mu4e-store-and-capture)
          (:map mu4e-view-mode-map
-               ("C-c c") . 'org-mu4e-store-and-capture)))
+               ("C-c c" . org-mu4e-store-and-capture)))))
 
 (use-package dired
   :config (progn
