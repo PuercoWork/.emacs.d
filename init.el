@@ -47,14 +47,6 @@
       create-lockfiles nil
       uniquify-buffer-name-style 'forward)
 
-;; OS X specific
-
-(setq mac-command-modifier 'meta
-      mac-option-modifier nil
-      ns-function-modifier 'hyper
-      mac-right-option-modifier 'ctrl
-      locate-command "mdfind")
-
 (set-face-attribute 'default nil :height 160)
 
 (use-package minions
@@ -164,7 +156,7 @@
 
 (use-package password-vault+
   :load-path "site-lisp/password-vault+"
-  :init (password-vault+-register-secrets-file (substitute-in-file-name "$HOME/.emacs.d/passwords.el.gpg")))
+  :config (password-vault+-register-secrets-file (substitute-in-file-name "$HOME/.emacs.d/passwords.el.gpg")))
 
 
 (use-package docker-tramp
@@ -296,22 +288,16 @@
   :config (setq org-catch-invisible-edits 'show))
 
 (use-package mu4e
-  :load-path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/"
+  :load-path "/usr/local/share/emacs/site-lisp/mu4e/"
   :config (setq mu4e-maildir "~/.mail/gmail"
                 mu4e-sent-folder "/Sent Mail"
                 mu4e-trash-folder "/Trash"
-                mu4e-get-mail-command "mbsync -a")
-  :bind ((:map mu4e-headers-mode-map
-               (")" . mu4e-headers-next-unread)
-               ("(" . mu4e-headers-prev-unread))
-         (:map mu4e-view-mode-map
-               (")" . mu4e-view-headers-next-unread)
-               ("(" . mu4e-view-headers-prev-unread))))
+                mu4e-get-mail-command "mbsync -a"))
 
 (use-package mu4e-alert
   :ensure t
   :config (progn
-            (mu4e-alert-set-default-style 'osx-notifier)
+            (mu4e-alert-set-default-style 'libnotify)
             (mu4e-alert-enable-mode-line-display)))
 
 (use-package org-mu4e
@@ -392,7 +378,7 @@
   :ensure t)
 
 (use-package sly
-  :ensure t
+  :load-path "site-lisp/sly"
   :config (setq inferior-lisp-program "/usr/local/bin/sbcl"
                 sly-lisp-implementations '((sbcl ("/usr/local/bin/sbcl")))))
 
@@ -505,28 +491,21 @@
 (use-package rainbow-mode
   :ensure t
   :config (setq rainbow-x-colors nil)
-  :mode (("\\.css$" . rainbow-mode)
-         ("\\.less$" . rainbow-mode)
-         ("\\.sass$" . rainbow-mode)))
+  :hook ((css-mode . rainbow-mode)))
 
 (use-package rainbow-delimiters
   :ensure t
   :hook ((prog-mode . rainbow-delimiters-mode)))
 
-(use-package ri
-  :load-path "site-lisp/ri.el")
+;; (use-package ri
+;;   :load-path "site-lisp/ri.el")
 
-(use-package pivotal-tracker
-  :load-path "site-lisp/pivotal-tracker")
-
-;; TODO configure
-(use-package pamparam
-  :ensure t)
-
-(use-package org-drill
-  :load-path "site-lisp/org-drill")
+;; (use-package pivotal-tracker
+;;   :load-path "site-lisp/pivotal-tracker")
 
 (setq project-config-file "~/.emacs.d/project-config.el")
 (load project-config-file 'noerror)
 
 (put 'narrow-to-page 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
