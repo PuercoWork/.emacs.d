@@ -22,8 +22,6 @@
   (add-to-list 'package-archives org-mode t)
   )
 
-(package-initialize)
-
 ;; misc
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
@@ -120,6 +118,8 @@
   :bind ((:map Info-mode-map
                ("(" . Info-backward-node)
                (")" . Info-forward-node))))
+
+(global-auto-revert-mode t)
 
 (use-package ace-window
   :ensure t
@@ -423,7 +423,8 @@
 
 (use-package rjsx-mode
   :ensure t
-  :mode "\\.jsx\\'")
+  :mode "\\.jsx\\'"
+  :mode "\\.js\\'")
 
 (use-package typescript-mode
   :ensure t)
@@ -496,6 +497,12 @@
 (use-package rainbow-delimiters
   :ensure t
   :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 
 ;; (use-package ri
 ;;   :load-path "site-lisp/ri.el")
