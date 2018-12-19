@@ -19,8 +19,7 @@
       (org-mode '("org" . "https://orgmode.org/elpa/")))
   (add-to-list 'package-archives melpa t)
   ;; (add-to-list 'package-archives emacs-pe t)
-  (add-to-list 'package-archives org-mode t)
-  )
+  (add-to-list 'package-archives org-mode t))
 
 ;; misc
 (setq custom-file "~/.emacs.d/custom.el")
@@ -45,7 +44,7 @@
       create-lockfiles nil
       uniquify-buffer-name-style 'forward)
 
-(set-face-attribute 'default nil :height 160)
+(set-face-attribute 'default nil :height 150)
 
 (use-package minions
   :ensure t
@@ -89,7 +88,10 @@
 
 (use-package counsel
   :ensure t
-  :config (setq counsel-find-file-occur-use-find t)
+  :after (helpful)
+  :config (setq counsel-find-file-occur-use-find t
+                counsel-describe-function-function #'helpful-callable
+                counsel-describe-variable-function #'helpful-variable)
   :bind (("C-h f" . counsel-describe-function)
          ("C-h v" . counsel-describe-variable)
          ("C-c C-f" . counsel-git)
@@ -98,6 +100,9 @@
          ("<f2> u" . counsel-unicode-char)
          ("<f2> k" . counsel-find-library)
          ("C-x p" . counsel-git)))
+
+(use-package helpful
+  :ensure t)
 
 (use-package find-file-in-project
   :ensure t)
@@ -178,8 +183,7 @@
       smtpmail-debug-info t
       send-mail-function 'smtpmail-send-it)
 
-(use-package lisp-mode
-  :mode (".*?fino-editor.*?\\.fs" . lisp-mode))
+(use-package lisp-mode)
 
 (use-package paredit
   :ensure t
@@ -193,24 +197,32 @@
 (use-package undo-tree
   :ensure t
   :config (global-undo-tree-mode 1)
-  :bind (("C-x u" . 'undo)))
+  :bind (("C-x u" . undo)))
+
+(defun my/show-commit ()
+  (interactive)
+  (let ((revision (car (vc-annotate-extract-revision-at-line))))
+    (magit-show-commit revision)))
+
+(use-package vc-annotate)
 
 (use-package magit
   :ensure t
-  :bind (("C-c s" . 'magit-status))
-  :config
-  (setq magit-display-buffer-function
-        'magit-display-buffer-fullframe-status-topleft-v1))
+  :after (vc-annotate)
+  :bind (("C-c s" . 'magit-status)
+         (:map vc-annotate-mode-map
+               ("<return>" . my/show-commit)))
+  :config (setq magit-display-buffer-function
+                'magit-display-buffer-fullframe-status-topleft-v1))
 
 (use-package magithub
   :ensure t
   :config (magithub-feature-autoinject t)
   (magithub-feature-autoinject '(commit-browse status-checks-header completion)))
 
-(add-hook 'lisp-interaction-mode-hook (lambda ()
-                                        (setq tab-always-indent 'complete)))
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (setq tab-always-indent 'complete)))
+(dolist (hook '(lisp-interaction-mode-hook emacs-lisp-mode-hook))
+  (add-hook hook (lambda ()
+                   (setq tab-always-indent 'complete))))
 
 (use-package eldoc
   :init (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
@@ -266,7 +278,6 @@
   :ensure t
   :config
   (setq x-underline-at-descent-line t)
-  (setq moody-slant-function #'moody-slant-apple-rgb)
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
@@ -283,8 +294,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package org
-  :bind
-  (("C-c a" . 'org-agenda))
+  :bind (("C-c a" . 'org-agenda))
   :config (setq org-catch-invisible-edits 'show))
 
 (use-package mu4e
@@ -313,7 +323,8 @@
             (add-hook 'dired-mode-hook 'dired-hide-details-mode)
             (setq dired-dwim-target t)))
 
-(use-package dired-x)
+(use-package dired-x
+  :after (dired))
 
 (use-package ibuffer-vc
   :ensure t
@@ -382,6 +393,9 @@
   :config (setq inferior-lisp-program "/usr/local/bin/sbcl"
                 sly-lisp-implementations '((sbcl ("/usr/local/bin/sbcl")))))
 
+(use-package sly-macrostep
+  :ensure t)
+
 (use-package js2-mode
   :ensure t
   :config (setq js2-basic-offset 2)
@@ -402,7 +416,9 @@
                ("M-p" . 'flymake-goto-prev-error))))
 
 (use-package eglot
-  :ensure t)
+  :ensure t
+  :config (add-to-list 'eglot-server-programs
+                       '((js-mode js2-mode rjsx-mode typescript-mode) . ("javascript-typescript-stdio"))))
 
 ;; Not sure if necessary. C-x r w seems to be enough for my needs.
 (use-package eyebrowse
@@ -418,8 +434,7 @@
 (use-package json-mode
   :ensure t
   :config
-  (setq json-reformat:indent-width 2)
-  :mode (".*?fino-editor.*?\\.ast" . json-mode))
+  (setq json-reformat:indent-width 2))
 
 (use-package rjsx-mode
   :ensure t
@@ -504,11 +519,29 @@
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
-;; (use-package ri
-;;   :load-path "site-lisp/ri.el")
+(use-package ri
+  :load-path "site-lisp/ri.el")
 
-;; (use-package pivotal-tracker
-;;   :load-path "site-lisp/pivotal-tracker")
+(use-package pivotal-tracker
+  :load-path "site-lisp/pivotal-tracker")
+
+(use-package sauron
+  :ensure t
+  :config (setq sauron-separate-frame nil
+                sauron-sticky-frame nil
+                sauron-dbus-cookie t
+                sauron-modules '(sauron-org sauron-notifications sauron-mu4e sauron-dbus)))
+
+;; TODO: Configure as dedicated windows: sauron, sly-mrepl and
+;; compilation modes.
+(use-package shackle
+  :ensure t
+  :config (setq shackle-rules '((compilation-mode :noselect t))
+                ;; shackle-default-rule '(:select t)
+                ))
+
+(use-package window-purpose
+  :ensure t)
 
 (setq project-config-file "~/.emacs.d/project-config.el")
 (load project-config-file 'noerror)
