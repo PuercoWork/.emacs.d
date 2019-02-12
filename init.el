@@ -102,7 +102,10 @@
          ("C-x p" . counsel-git)))
 
 (use-package helpful
-  :ensure t)
+  :ensure t
+  :bind (("C-h k" . helpful-key)
+         (:map emacs-lisp-mode-map
+               ("C-c C-d" . helpful-at-point))))
 
 (use-package find-file-in-project
   :ensure t)
@@ -135,6 +138,10 @@
          ("M-3" . 'split-window-right)
          ("C-x o" . 'ace-window)
          ("C-x t" . (lambda () (interactive) (ace-window 4)))))
+
+(use-package ibuffer
+  :bind ((:map ibuffer-mode-map
+               ("M-o" . 'other-window))))
 
 (use-package expand-region
   :ensure t
@@ -203,6 +210,14 @@
   (interactive)
   (let ((revision (car (vc-annotate-extract-revision-at-line))))
     (magit-show-commit revision)))
+
+(use-package ediff
+  :config (setq ediff-highlight-all-diffs nil))
+
+(use-package ediff-wind
+  :after (ediff)
+  :config (setq ediff-window-setup-function #'ediff-setup-windows-plain
+                ediff-split-window-function #'split-window-horizontally))
 
 (use-package vc-annotate)
 
@@ -294,15 +309,24 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package org
-  :bind (("C-c a" . 'org-agenda))
+  :bind (("C-c a" . 'org-agenda)
+         ("C-c c" . 'org-capture))
   :config (setq org-catch-invisible-edits 'show))
 
+(use-package org-journal
+  :ensure t
+  :after (org))
 (use-package mu4e
   :load-path "/usr/local/share/emacs/site-lisp/mu4e/"
   :config (setq mu4e-maildir "~/.mail/gmail"
                 mu4e-sent-folder "/Sent Mail"
                 mu4e-trash-folder "/Trash"
-                mu4e-get-mail-command "mbsync -a"))
+                mu4e-get-mail-command "mbsync -a"
+                mail-user-agent 'mu4e-user-agent
+                mu4e-change-filenames-when-moving t)
+  :bind ((:map mu4e-view-mode-map
+               ("(" . mu4e-view-headers-prev-unread)
+               (")" . mu4e-view-headers-next-unread))))
 
 (use-package mu4e-alert
   :ensure t
@@ -549,3 +573,4 @@
 (put 'narrow-to-page 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(put 'scroll-left 'disabled nil)
